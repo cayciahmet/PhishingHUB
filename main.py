@@ -45,6 +45,7 @@ URLHAUS_AUTH_KEY = os.getenv("URLHAUS_AUTH_KEY")
 IMAP_SERVER = os.getenv("IMAP_SERVER", "imap.gmail.com")
 IMAP_USER = os.getenv("IMAP_USER", "")
 IMAP_PASS = os.getenv("IMAP_PASS", "")
+IMAP_SCAN_TOKEN = os.getenv("IMAP_SCAN_TOKEN", "")
 
 # --- AI chat (OpenRouter): env only, değer koda yazılmaz ---
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -781,7 +782,11 @@ async def analyze_urls(body: BatchRequest):
 
 
 @app.post("/analyze/imap")
-async def analyze_imap_inbox():
+async def analyze_imap_inbox(request: Request):
+    if not IMAP_SCAN_TOKEN:
+        raise HTTPException(status_code=503, detail="IMAP_SCAN_TOKEN təyin edilməyib; ictimai poçt qutusu çıxışı bağlıdır.")
+    if not secrets.compare_digest(request.headers.get("x-imap-token", ""), IMAP_SCAN_TOKEN):
+        raise HTTPException(status_code=403, detail="IMAP giriş kodu yanlışdır.")
     if not IMAP_USER or not IMAP_PASS:
         raise HTTPException(status_code=400, detail="IMAP kimlik bilgileri (IMAP_USER / IMAP_PASS) tanımlanmamış.")
     try:
