@@ -1,4 +1,4 @@
-# PhishingHUB — Final integration
+# ArgusAI — Final integration
 
 URL, fayl və IMAP e-poçt analizi. Orijinal rənglər, şriftlər və yuxarı skan bölməsinin quruluşu saxlanılıb. Nəticə paneli avtomatik açılır. Nümunə düymələri və saxta API cavabları tətbiqə daxil edilməyib.
 

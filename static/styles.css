@@ -196,9 +196,8 @@
 
         .site-footer { display: flex; align-items: center; justify-content: space-between; min-height: 75px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; margin-top: 40px; }
         .footer-brand { display: flex; align-items: center; gap: 8px; }
-        .signal-mark { width: 31px; height: 31px; fill: none; stroke: var(--cobalt); stroke-width: 2.15; stroke-linecap: square; stroke-linejoin: miter; }
-        .footer-brand .signal-mark { width: 23px; height: 23px; }
-        body { overflow-x: hidden; }
+        .signal-mark { width: 23px; height: 23px; fill: none; stroke: var(--cobalt); stroke-width: 2.15; stroke-linecap: square; stroke-linejoin: miter; }
+        .footer-brand         body { overflow-x: hidden; }
         img, svg { max-width: 100%; }
         .hero-section > *, .workspace-card, .hero-copy, .workspace-area { min-width: 0; }
         .mode-tabs { -webkit-overflow-scrolling: touch; scrollbar-width: none; scroll-snap-type: x proximity; }
@@ -383,3 +382,6 @@
 /* Status dot reflects how many providers answered, not just that the API is up */
 .status-dot.is-partial { background: var(--amber); box-shadow: 0 0 0 4px var(--warn-bg); }
 .status-dot.is-down { background: var(--danger); box-shadow: 0 0 0 4px var(--danger-bg); }
+
+/* ARGUS sits in the text colour, AI in the accent, so the lockup reads as one name */
+.brand-wordmark i { font-style: normal; color: var(--cobalt); }

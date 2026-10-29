@@ -1,6 +1,9 @@
 /* Device-local history. No file bytes or mailbox credentials are stored. */
 'use strict';
 window.PhishingHistory=(()=>{
+ // Storage identifiers keep the pre-rebrand name on purpose: renaming them would
+ // point the browser at a fresh, empty database and discard every saved analysis.
+ // They are never shown to the reader.
  const NAME='PhishingHUB-history',VERSION=1,LIMIT=200;let connection=null;
  function db(){if(connection)return connection;connection=new Promise((resolve,reject)=>{if(!window.indexedDB){reject(Error('History storage is not supported.'));return;}const r=indexedDB.open(NAME,VERSION);r.onupgradeneeded=()=>{const d=r.result;for(const name of ['analyses','exports','meta'])if(!d.objectStoreNames.contains(name)){const s=d.createObjectStore(name,{keyPath:'id'});if(name!=='meta')s.createIndex('time','time');}};r.onsuccess=()=>{const d=r.result;d.onversionchange=()=>{d.close();connection=null;};resolve(d);};r.onerror=()=>{connection=null;reject(r.error||Error('History storage could not be opened.'));};r.onblocked=()=>{connection=null;reject(Error('Close other site tabs to enable history.'));};});return connection;}
  function req(r){return new Promise((resolve,reject)=>{r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}

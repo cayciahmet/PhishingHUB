@@ -113,7 +113,7 @@ class Intelligence:
             self.pt_hits.append(stamp)
             body={'url':url,'format':'json'}
             if self.key('PHISHTANK_APP_KEY'):body['app_key']=self.key('PHISHTANK_APP_KEY')
-            data,error=await self.call(name,scope,'POST','https://checkurl.phishtank.com/checkurl/',data=body,headers={'User-Agent':self.key('PHISHTANK_USER_AGENT') or 'phishtank/PhishingHUB-student-project'})
+            data,error=await self.call(name,scope,'POST','https://checkurl.phishtank.com/checkurl/',data=body,headers={'User-Agent':self.key('PHISHTANK_USER_AGENT') or 'phishtank/ArgusAI-student-project'})
             if error:return error
             d=data.get('results')
             if not isinstance(d,dict):return result(name,scope,'error','Unexpected response','PhishTank did not return a URL result.')

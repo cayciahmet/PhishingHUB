@@ -14,7 +14,7 @@ services:
       - key: PHISHTANK_ENABLED
         value: "true"
       - key: PHISHTANK_USER_AGENT
-        value: phishtank/PhishingHUB-student-project
+        value: phishtank/ArgusAI-student-project
       # Secrets: left empty on purpose. Fill them in Render > Environment.
       - key: VT_API_KEY
         sync: false

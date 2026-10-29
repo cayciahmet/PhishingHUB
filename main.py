@@ -53,13 +53,13 @@ class BodyLimit:
 
 @asynccontextmanager
 async def lifespan(app):
-    client=httpx.AsyncClient(timeout=httpx.Timeout(10,connect=5),follow_redirects=False,headers={'User-Agent':'PhishingHUB/2.0'})
+    client=httpx.AsyncClient(timeout=httpx.Timeout(10,connect=5),follow_redirects=False,headers={'User-Agent':'ArgusAI/2.1'})
     app.state.client=client;app.state.config=dict(os.environ);app.state.intel=Intelligence(client,app.state.config)
     app.state.reports=OrderedDict();app.state.ai_hits={};app.state.analysis_slots=asyncio.Semaphore(2);app.state.mail_lock=asyncio.Lock();app.state.report_tasks={}
     try:yield
     finally:await client.aclose()
 
-app=FastAPI(title='PhishingHUB',version='2.0',lifespan=lifespan)
+app=FastAPI(title='ArgusAI',version='2.1',lifespan=lifespan)
 app.add_middleware(BodyLimit)
 app.mount('/static',StaticFiles(directory=BASE/'static'),name='static')
 
@@ -211,7 +211,7 @@ async def analyze_imap(request:Request):
 
 @app.get('/reports/{token}/download')
 async def download_report(token:str,request:Request):
-    return PlainTextResponse(text_report(get_report(request,token)),headers={'Content-Disposition':'attachment; filename="PhishingHUB-analysis-report.txt"'})
+    return PlainTextResponse(text_report(get_report(request,token)),headers={'Content-Disposition':'attachment; filename="ArgusAI-analysis-report.txt"'})
 
 @app.post('/reports/{token}/ai')
 async def ai_report(token:str,request:Request):

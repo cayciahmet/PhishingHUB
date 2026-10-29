@@ -1,4 +1,4 @@
-PHISHINGHUB — SON VERSİYA
+ARGUSAI — SON VERSİYA
 
 1. Bu qovluğun içindəki BÜTÜN faylları GitHub repo kökünə yerləşdirin.
 2. README.md daxilində Render / lokal quraşdırma addımlarına baxın.
