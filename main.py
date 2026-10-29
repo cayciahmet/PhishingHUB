@@ -171,7 +171,7 @@ def summarize_providers(rows,scope):
 async def analyze_imap(request:Request):
     c=request.app.state.config;expected=c.get('IMAP_SCAN_TOKEN','')
     if not expected:raise HTTPException(503,'IMAP is not configured for access.')
-    if not hmac.compare_digest(request.headers.get('x-imap-token',''),expected):raise HTTPException(403,'Incorrect IMAP access code.')
+    if not hmac.compare_digest(request.headers.get('x-imap-token','').strip(),expected.strip()):raise HTTPException(403,'Incorrect IMAP access code.')
     if not c.get('IMAP_USER') or not c.get('IMAP_PASS'):raise HTTPException(503,'IMAP credentials are not configured.')
     async with request.app.state.mail_lock:
         try:raw=await asyncio.wait_for(asyncio.to_thread(fetch_mail,c),timeout=75)
