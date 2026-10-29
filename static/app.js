@@ -101,5 +101,37 @@ document.addEventListener('DOMContentLoaded',()=>{
  $('history-exports-tab').onclick=()=>{historyTab='exports';$('history-exports-tab').classList.add('active');$('history-analyses-tab').classList.remove('active');$('history-exports-tab').setAttribute('aria-selected','true');$('history-analyses-tab').setAttribute('aria-selected','false');drawHistory();};
  $('history-search').oninput=drawHistory;$('history-kind').onchange=drawHistory;$('history-clear').onclick=async()=>{if(!confirm('Delete this browser’s saved analyses, report exports and counters?'))return;try{await history.clear();await refreshHistory();$('history-status').textContent='Local history cleared.';}catch(e){historyError(e);}};
  refreshHistory();
- const health=document.querySelector('.live-status');fetch('/health',{signal:AbortSignal.timeout(10000)}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(d=>{const configured=Object.values(d.sources).filter(Boolean).length;health.textContent='API ACTIVE · '+configured+'/'+Object.keys(d.sources).length+' CONFIGURED';const tf=document.getElementById('imap-token');if(tf&&d.imap_open_access){tf.value='';tf.disabled=true;tf.placeholder='Not required - open demo mode is enabled';}}).catch(()=>{health.textContent='API UNREACHABLE';});
+ const statusLabel=document.getElementById('status-label');const statusDot=document.getElementById('status-dot');fetch('/health',{signal:AbortSignal.timeout(10000)}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(d=>{const names=Object.keys(d.sources),online=names.filter(n=>d.sources[n]).length;statusLabel.textContent=online===names.length?'ALL SERVICES ONLINE':online===0?'NO SERVICES CONFIGURED':online+' OF '+names.length+' SERVICES ONLINE';statusLabel.title=names.map(n=>n+': '+(d.sources[n]?'online':'not configured')).join(' · ');if(statusDot){statusDot.classList.toggle('is-partial',online>0&&online<names.length);statusDot.classList.toggle('is-down',online===0);}const tf=document.getElementById('imap-token');if(tf&&d.imap_open_access){tf.value='';tf.disabled=true;tf.placeholder='Not required - open demo mode is enabled';}}).catch(()=>{statusLabel.textContent='API UNREACHABLE';if(statusDot)statusDot.classList.add('is-down');});
 });
+
+
+/* Colour theme: Auto follows the operating system, and an explicit choice is
+   remembered on this device only. The stored value is applied in <head> before
+   first paint, so the page never flashes the wrong theme. */
+(function(){
+  var KEY='ph-theme',ORDER=['auto','light','dark'],root=document.documentElement;
+  var button=document.getElementById('theme-toggle');
+  if(!button)return;
+  var icon=document.getElementById('theme-icon'),name=document.getElementById('theme-name');
+  var GLYPH={
+    auto:'<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16z" fill="currentColor" stroke="none"/>',
+    light:'<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/>',
+    dark:'<path d="M20 13.5A8 8 0 1110.5 4a6.5 6.5 0 009.5 9.5z"/>'
+  };
+  function stored(){try{return localStorage.getItem(KEY)||'auto';}catch(e){return 'auto';}}
+  function apply(mode){
+    if(mode==='auto')root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme',mode);
+    icon.innerHTML=GLYPH[mode];
+    name.textContent=mode.charAt(0).toUpperCase()+mode.slice(1);
+    button.setAttribute('aria-label','Colour theme: '+mode+'. Click to change.');
+  }
+  var current=stored();
+  if(ORDER.indexOf(current)<0)current='auto';
+  apply(current);
+  button.addEventListener('click',function(){
+    current=ORDER[(ORDER.indexOf(current)+1)%ORDER.length];
+    try{current==='auto'?localStorage.removeItem(KEY):localStorage.setItem(KEY,current);}catch(e){}
+    apply(current);
+  });
+})();

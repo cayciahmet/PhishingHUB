@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="description" content="PhishingHUB — şüpheli URL, dosya ve IMAP mailbox analizi için pasif güvenlik çalışma alanı." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232457e6' stroke-width='2'%3E%3Cpath d='M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8'/%3E%3Cpolyline points='16 6 12 2 8 6'/%3E%3Cline x1='12' y1='2' x2='12' y2='15'/%3E%3C/svg%3E" />
     <title>PhishingHUB — Passive Security Workspace</title>
 
+    <script>(function(){try{var t=localStorage.getItem("ph-theme");if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     
     
-<link rel="stylesheet" href="/static/styles.css?v=3"></head>
+<link rel="stylesheet" href="/static/styles.css?v=4"></head>
 
 <body>
     <div class="site-shell">
@@ -27,7 +29,8 @@
                     <span class="brand-wordmark">PHISHINGHUB</span>
                 </a>
                 <div class="header-actions"><button id="history-open" class="report-btn">History <span id="history-header-count">0</span></button>
-                    <div class="live-status"><div class="status-dot"></div> API CHECKING</div>
+                    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme"><svg id="theme-icon" viewBox="0 0 24 24" aria-hidden="true"></svg><span class="theme-name" id="theme-name">Auto</span></button>
+                    <div class="live-status"><div class="status-dot" id="status-dot"></div> <span id="status-label">CHECKING SERVICES</span></div>
                 </div>
             </div>
         </header>
