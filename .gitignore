@@ -16,6 +16,3 @@ __pycache__/
 # IDE ve İşletim Sistemi
 .vscode/
 .DS_Store
-
-# Test Cache
-.pytest_cache/

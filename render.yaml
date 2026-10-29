@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: phishinghub
+    runtime: python
+    plan: free
+    region: frankfurt
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.11
+      - key: PHISHTANK_ENABLED
+        value: "true"
+      - key: PHISHTANK_USER_AGENT
+        value: phishtank/PhishingHUB-student-project
+      # Secrets: left empty on purpose. Fill them in Render > Environment.
+      - key: VT_API_KEY
+        sync: false
+      - key: PHISHTANK_APP_KEY
+        sync: false
+      - key: URLHAUS_AUTH_KEY
+        sync: false
+      - key: ABUSEIPDB_API_KEY
+        sync: false
+      - key: PULSEDIVE_API_KEY
+        sync: false
+      - key: IMAP_SERVER
+        sync: false
+      - key: IMAP_USER
+        sync: false
+      - key: IMAP_PASS
+        sync: false
+      - key: IMAP_SCAN_TOKEN
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: AI_MODEL
+        sync: false
+      - key: AI_FALLBACK_MODEL
+        sync: false

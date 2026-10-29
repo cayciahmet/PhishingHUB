@@ -1,0 +1,20 @@
+PHISHINGHUB — SON VERSİYA
+
+1. Bu qovluğun içindəki BÜTÜN faylları GitHub repo kökünə yerləşdirin.
+2. README.md daxilində Render / lokal quraşdırma addımlarına baxın.
+3. .env.example yalnız nümunədir. Real açarları Render Environment bölməsinə yazın.
+4. Tək HTML faylını açmaq backend-i işlətmir. Uvicorn və ya Render lazımdır.
+5. Sample case, 25/75 demo düymələri və saxta provider nəticələri tətbiqdən çıxarılıb.
+6. Beş mənbə: VirusTotal, PhishTank, URLhaus, AbuseIPDB, Pulsedive.
+7. Fayl həddi: 200 MiB. IMAP xam məktub həddi ayrıca 25 MiB-dir.
+8. AI istəyə bağlıdır. Standart ingiliscə hesabat AI olmadan da işləyir.
+
+Əvvəlki ZIP ilə qarışdırmayın. Bu paketdəki main.py yanında analysis.py,
+intelligence.py, mail_analysis.py və reports.py də olmalıdır.
+
+YENİLƏMƏ: TARİXÇƏ VƏ RİSK MODELİ
+- History: analizlər, TXT/JSON export-ları, sayğaclar, axtarış və filtr.
+- Tarixçə yalnız bu cihazın brauzerində saxlanır, komanda üzrə ortaq deyil.
+- Bal: 0–30 Low risk; 31–69 Suspicious; 70–100 Dangerous.
+- Sübutlara əsaslanan 18, 19, 20 kimi tam ədədlər mümkündür. AI rəqəmi uydurmur.
+- static/history.js yeni fayldır; mütləq repo-ya əlavə edin.

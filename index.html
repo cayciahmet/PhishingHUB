@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="tr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="PhishingHUB — şübhəli URL, fayl və IMAP poçt qutusunun pasif təhlükəsizlik analizi." />
+    <meta name="description" content="PhishingHUB — şüpheli URL, dosya ve IMAP mailbox analizi için pasif güvenlik çalışma alanı." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232457e6' stroke-width='2'%3E%3Cpath d='M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8'/%3E%3Cpolyline points='16 6 12 2 8 6'/%3E%3Cline x1='12' y1='2' x2='12' y2='15'/%3E%3C/svg%3E" />
     <title>PhishingHUB — Passive Security Workspace</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    
+<link rel="stylesheet" href="/static/styles.css?v=3"></head>
 
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
 <body>
     <div class="site-shell">
         <header class="site-header">
@@ -25,8 +26,8 @@
                     </svg>
                     <span class="brand-wordmark">PHISHINGHUB</span>
                 </a>
-                <div class="header-actions">
-                    <div class="live-status"><div class="status-dot"></div> API ACTIVE</div>
+                <div class="header-actions"><button id="history-open" class="report-btn">History <span id="history-header-count">0</span></button>
+                    <div class="live-status"><div class="status-dot"></div> API CHECKING</div>
                 </div>
             </div>
         </header>
@@ -36,14 +37,14 @@
                 <div class="hero-copy">
                     <div class="eyebrow"><div class="eyebrow-line"></div> PASSIVE INTELLIGENCE</div>
                     <h1>Detect malicious intent <em>before execution.</em></h1>
-                    <p class="hero-lead">PhishingHUB acts as a secure airgap for suspicious links, files, and incoming mailboxes. Analyzed in isolation, designed to keep credentials safe.</p>
-
+                    <p class="hero-lead">PhishingHUB inspects suspicious links and file indicators without executing them. Evidence-led checks help analysts assess risk and identify next steps.</p>
+                    
                     <div class="hero-facts">
-                        <div><div class="fact-mark">✓</div> Memory-Safe File Parsing</div>
-                        <div><div class="fact-mark">✓</div> 70+ AV Engines (VirusTotal)</div>
-                        <div><div class="fact-mark">✓</div> Automated IMAP Mail Scanning</div>
+                        <div><div class="fact-mark">✓</div> Bounded Static Inspection</div>
+                        <div><div class="fact-mark">✓</div> Evidence-Based Risk Scoring</div>
+                        <div><div class="fact-mark">✓</div> Mailbox Triage Workflow</div>
                     </div>
-
+                    
                     <div class="hero-signature">SYSTEM ARCHITECTURE: FASTAPI ASYNC STREAM <div class="signature-rule"></div></div>
                 </div>
 
@@ -53,11 +54,11 @@
                             <div><span class="section-kicker">ANALYSIS MODULE</span><h2>Threat Scanner</h2></div>
                             <div class="workspace-index">MOD-01</div>
                         </div>
-
+                        
                         <div class="mode-tabs">
                             <button class="mode-tab active" id="tab-url">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M10 13a5 5 0 0 0 7.54 .54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
                                     <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                                 </svg> URL Scan
                             </button>
@@ -75,25 +76,24 @@
                                 </svg> IMAP Inbox
                             </button>
                         </div>
-
+                        
                         <!-- URL INPUT UI -->
                         <div class="input-stack" id="ui-url">
-                            <label class="input-label" for="target-url">Hədəf(lar)</label>
+                            <label class="input-label" for="target-url">Target Address</label>
                             <div class="url-input-wrap">
                                 <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>
-                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                                 </svg>
-                                <textarea id="target-url" placeholder="https://sus-link.example/invoice.pdf
-https://digər-link.example/x" autocomplete="off" maxlength="65536" rows="3"></textarea>
+                                <input type="text" id="target-url" placeholder="https://suspicious-link.com/invoice.pdf" autocomplete="off" maxlength="2048" />
                             </div>
-                            <p class="field-help">Hər sətirdə bir URL yazın (maks. 10 unikal). Tək URL təkli yoxlama; bir neçə URL toplu yoxlama kimi icra olunur.</p>
+                            <p class="field-help">URLs are submitted securely via multi-engine intelligence.</p>
                         </div>
 
                         <!-- FILE UPLOAD UI -->
                         <div class="input-stack" id="ui-file" style="display: none;">
-                            <label class="input-label">Hədəf Faylı</label>
-                            <div class="drop-zone" id="file-drop-zone" role="button" tabindex="0" aria-label="Fayl seç və ya sürüyüb burax">
+                            <label class="input-label">Target File</label>
+                            <div class="drop-zone" id="file-drop-zone" role="button" tabindex="0" aria-label="Dosya seç veya sürükle bırak">
                                 <div class="drop-icon">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
@@ -101,25 +101,25 @@ https://digər-link.example/x" autocomplete="off" maxlength="65536" rows="3"></t
                                     </svg>
                                 </div>
                                 <div>
-                                    <strong id="file-name-display">Seçmək üçün vurun və ya faylı buraxın</strong>
-                                    <span id="file-size-display">Maksimum yaddaş-təhlükəsiz axın limiti: 50MB</span>
+                                    <strong id="file-name-display">Click to browse or drop file</strong>
+                                    <span id="file-size-display">File size limit: 200 MB</span>
                                 </div>
                                 <input type="file" id="file-input" style="display: none;">
                             </div>
-                            <p class="field-help">Fayl istifadəçi tərəfində 2 MiB hissələrlə SHA-256 ilə hash-lanır; fayl məzmunu serverə getmir, yalnız hash göndərilir.</p>
+                            <p class="field-help">Max 200 MB (200 MiB). File content is uploaded to this server for bounded static analysis; external services receive hashes and extracted links only. No file is executed.</p>
                         </div>
 
                         <!-- IMAP INBOX UI -->
                         <div class="input-stack" id="ui-imap" style="display: none;">
-                            <label class="input-label">IMAP Poçt Qutusunun Yoxlanılması</label>
+                            <label class="input-label">IMAP Mailbox Polling</label><label class="field-help" for="imap-token">Mailbox access code</label><input type="password" id="imap-token" autocomplete="off" placeholder="Mailbox access code" maxlength="256" class="mail-access">
                             <div style="padding: 16px; border: 1px solid #bbb9b1; background: #fbfaf6; font-size: 12px; color: var(--muted); line-height: 1.5;">
-                                Bu modul backend yoxlamasını başladır: oxunmamış e-poçtları IMAP (Port 993, READONLY + BODY.PEEK) vasitəsilə gətirir, daxil edilmiş linkləri çıxarır və çoxmühərrikli kəşfiyyatdan keçirir.
+                                This module triggers backend polling to fetch unread emails via IMAP (Port 993), extracts embedded links, and runs them through multi-engine intelligence.
                             </div>
-                            <p class="field-help">Mühit dəyişənlərinin (IMAP_USER, IMAP_PASS) aktiv olduğundan əmin olun.</p>
+                            <p class="field-help">Authorized access only. Up to 5 unread messages; read status is preserved. This application does not independently verify SPF / DKIM / DMARC.</p>
                         </div>
-
+                        
                         <button class="analyze-button" id="scan-btn">
-                            YOXLAMA BAŞLAT
+                            INITIATE SCAN
                             <div class="analyze-icon">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -127,98 +127,37 @@ https://digər-link.example/x" autocomplete="off" maxlength="65536" rows="3"></t
                                 </svg>
                             </div>
                         </button>
-                        <button class="analyze-button analyze-cancel" id="cancel-scan" style="display:none;margin-left:8px;">
-                            Ləğv et
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
-                        <p id="scan-progress" class="field-help" style="margin-top:8px;"></p>
-
-                        <div id="result-box" style="display: none;" aria-live="polite"></div>
-
+                        
+                        <button id="cancel-scan" class="report-btn" hidden>Cancel</button><p id="preview-progress" class="field-help" aria-live="polite"></p><div id="result-box" style="display: none;" aria-live="polite"></div>
+                        
                         <div class="privacy-note">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
-                            <span>Trafik dinamik şəkildə Təhdid Kəşfiyyatı API-ləri vasitəsilə yönəldilir.</span>
+                            <span>File inspection runs on this server. External services receive indicators, not uploaded file content.</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- EVIDENCE & TRIAGE DASHBOARD -->
-            <section class="ai-section" id="dashboard" hidden aria-live="polite">
-                <div class="workspace-card ai-card">
-                    <div class="workspace-topline">
-                        <div><span class="section-kicker">EVIDENCE & TRIAGE</span><h2>Analiz Nəticələri</h2></div>
-                        <div class="dashboard-actions">
-                            <button id="export-json" class="copy-btn">JSON</button>
-                            <button id="export-csv" class="copy-btn">IOC · CSV</button>
-                            <button id="copy-iocs" class="copy-btn">IOC Kopyala</button>
-                            <button id="print-report" class="copy-btn">PDF / Çap</button>
-                        </div>
-                    </div>
-                    <p id="report-meta" class="field-help"></p>
-                    <div class="dashboard-metrics" id="report-metrics"></div>
-                    <div class="dashboard-grid">
-                        <article class="dashboard-panel">
-                            <h3>Nəticələrin Bölgüsü</h3>
-                            <div id="verdict-chart"></div>
-                        </article>
-                        <article class="dashboard-panel">
-                            <h3>Antivirus Motoru Nəticələri</h3>
-                            <div id="engine-chart"></div>
-                            <p class="field-help">“Aşkarlanmayıb” əsaslı təmizlik zəmanəti deyil. Toplu yoxlama zamanı mühərriklərin raportlarındakı sayların cəmidir.</p>
-                        </article>
-                    </div>
-                    <div class="dashboard-panel">
-                        <h3>Prioritet və Resurslar</h3>
-                        <div class="table-scroll">
-                            <table class="triage-table">
-                                <thead>
-                                    <tr><th>Hədəf</th><th>Prioritet</th><th>Nəticə</th><th>VirusTotal</th><th>URLhaus</th><th>AbuseIPDB</th><th>Pulsedive</th></tr>
-                                </thead>
-                                <tbody id="triage-rows"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="dashboard-grid">
-                        <article class="dashboard-panel">
-                            <h3>Phishing Göstəriciləri və Kanıtlar</h3>
-                            <div id="findings"></div>
-                        </article>
-                        <article class="dashboard-panel">
-                            <h3>Tövsiyələr (Növbəti Addımlar)</h3>
-                            <div id="next-steps"></div>
-                        </article>
-                    </div>
-                    <p class="field-help">Prioritet araşdırma sırasıdır, təhlükə ehtimalı faizi deyil. Lokal göstərici təkbaşına zərərliliyi təsdiqləmir. Hədəf URL birbaşa açılmır.</p>
-                </div>
-            </section>
-
-            <section class="ai-section">
-                <div class="workspace-card ai-card">
-                    <div class="workspace-topline">
-                        <div><span class="section-kicker">AI ASSISTANT</span><h2>Analiz Köməkçisi</h2></div>
-                        <div class="workspace-index">MOD-02</div>
-                    </div>
-                    <p class="field-help">Yoxlama bitdikdən sonra nəticəni avtomatik şərh edir; istəsən əlavə sual da verə bilərsən. Linkə klikləməyi heç vaxt təklif etmir.</p>
-                    <div class="ai-context-line" id="ai-context-line">Kontekst: yox — əvvəlcə bir yoxlama et.</div>
-                    <div class="ai-messages" id="ai-messages" aria-live="polite">
-                        <div class="ai-msg system">Hələ sual yoxdur. Əvvəlcə bir yoxlama edib sonra sual verə bilərsən.</div>
-                    </div>
-                    <div class="ai-input-row">
-                        <input type="text" id="ai-input" placeholder="məs. Bu nəticə nə deməkdir?" autocomplete="off" maxlength="2000" />
-                        <button class="ai-send" id="ai-send">SUAL</button>
-                    </div>
-                    <label class="ai-options"><input type="checkbox" id="ai-include" checked /> Son yoxlamanın nəticəsini əlavə et</label>
-                </div>
-            </section>
-        </main>
+            <section class="ai-section" id="analysis-dashboard" hidden><div class="workspace-card result-workspace">
+<div class="workspace-topline"><div><span class="section-kicker">MOD-02 / PHISHING INTELLIGENCE</span><h2>Investigation Overview</h2></div><div class="report-actions"><button id="download-report" class="report-btn">Export report ↓</button><button id="print-report" class="report-btn">Print / PDF ↗</button></div></div>
+<div class="mode-notice" id="mode-notice"></div><p id="app-notice" class="fineprint" aria-live="polite"></p>
+<div id="message-picker" class="message-picker" hidden><label for="message-choice">Message</label><select id="message-choice"></select></div><div class="case-strip"><div><span class="case-label">ANALYSIS TARGET</span><strong id="report-target"></strong></div><div><span class="case-label">CASE REFERENCE</span><strong id="report-id"></strong></div><div><span class="case-label">CHECKED AT</span><strong id="report-time"></strong></div></div>
+<div class="overview-grid"><article class="risk-summary"><div class="score-ring" id="score-ring"><div><b id="risk-number">—</b><span>/ 100</span></div></div><div class="risk-copy"><span class="case-label">OBSERVED RISK</span><h3 id="risk-level"></h3><p id="risk-description"></p><span class="model-label">Explainable rules v2.0 · not CVSS</span></div></article><article class="metric-tile"><span class="case-label">EVIDENCE</span><b id="finding-number"></b><p>Indicators requiring review</p></article><article class="metric-tile"><span class="case-label">ASSESSMENT SCOPE</span><b id="coverage-number"></b><p id="coverage-label"></p></article></div>
+<article class="assessment-brief"><div class="assessment-heading"><span class="section-kicker">ASSESSMENT LOGIC</span><span class="status-pill" id="assessment-quality"></span></div><h3 id="assessment-title"></h3><p id="assessment-basis"></p><div class="assessment-columns"><div><h4>Recommended verification</h4><p id="assessment-next"></p></div></div></article>
+<div class="result-grid"><article class="result-panel"><div class="panel-title"><h3>What drives this score?</h3><span>CONTRIBUTION</span></div><div id="contribution-chart"></div><p class="fineprint">Points are rule weights, not a percentage chance of phishing. Low scores do not establish safety.</p></article><article class="result-panel"><div class="panel-title"><h3>Checks & coverage</h3><span>VERIFIED SCOPE</span></div><div id="checks-list"></div><p class="fineprint">A skipped check is never shown as passed. Coverage measures completed checks, not detection accuracy.</p></article></div>
+<article class="result-panel evidence-panel"><div class="panel-title"><h3>Evidence register</h3><span id="evidence-caption"></span></div><div class="evidence-scroll"><table class="evidence-table"><thead><tr><th>INDICATOR</th><th>OBSERVATION</th><th>WEIGHT</th><th>SOURCE</th></tr></thead><tbody id="evidence-body"></tbody></table></div><p id="no-evidence" class="fineprint" hidden>No weighted indicators were observed within the completed checks. Unchecked content may still contain threats.</p></article>
+<div class="result-grid"><article class="result-panel"><div class="panel-title"><h3 id="context-heading">Investigation details</h3><span>MODE-SPECIFIC</span></div><div id="url-context" hidden></div><div id="file-context" hidden></div><div id="email-context" hidden></div></article><article class="result-panel"><div class="panel-title"><h3>Extracted indicators</h3><button id="copy-indicators" class="report-btn">Copy defanged</button></div><div id="indicator-list"></div><p class="fineprint">Addresses are displayed as text. Copy defanged indicators to share them without creating clickable links.</p></article></div>
+<article class="result-panel source-ledger"><div class="panel-title"><h3>Reputation checks</h3><span>APPLICABLE TO THIS ANALYSIS</span></div><p id="source-count" class="fineprint"></p><div class="evidence-scroll"><table class="provider-table"><thead><tr><th>SOURCE</th><th>WHAT IS CHECKED</th><th>STATUS</th><th>RESULT / AVAILABILITY</th></tr></thead><tbody id="source-status"></tbody></table></div><p id="vendor-note" class="fineprint" hidden>Vendor results (for example Malwarebytes or Microsoft) can only be shown when actually returned by a reputation report. A vendor is not an independent connected API merely because its name appears in a report.</p><p class="fineprint">Source results are retrieved by the backend. Missing records do not establish safety. Provider timestamps and response states are included in the downloaded report.</p></article>
+<article id="engine-panel" class="result-panel source-ledger" hidden><div class="panel-title"><h3>Individual engine results</h3><span>FROM THE RETURNED REPORT</span></div><div class="evidence-scroll"><table class="provider-table"><thead><tr><th>ENGINE</th><th>CATEGORY</th><th>DETECTION</th><th>ENGINE UPDATE</th></tr></thead><tbody id="engine-rows"></tbody></table></div><p class="fineprint">Only engines present in the provider response are listed. Undetected is not a safety guarantee.</p></article><article class="soc-report action-center"><div class="soc-heading"><div><span class="section-kicker">YOUR NEXT STEP</span><h3 id="personal-heading">What should I do now?</h3></div><button id="download-brief" class="report-btn">Download full report ↓</button></div><p class="fineprint">Choose what happened. The steps below adapt to your situation; no technical background is required.</p><div class="exposure-choices" role="group" aria-label="What happened?"><button class="exposure-option selected" data-exposure="received" aria-pressed="true">I only received it</button><button class="exposure-option" data-exposure="clicked" aria-pressed="false">I clicked / opened it</button><button class="exposure-option" data-exposure="credentials" aria-pressed="false">I entered a password</button></div><div class="decision-note" id="personal-explanation"></div><div id="personal-actions" class="personal-actions"></div><div class="soc-bottom"><span>Detection is not a guarantee. No file or link is executed by this application.</span><span>Detailed findings and source statuses are included in your downloadable report.</span></div><div class="ai-report-controls"><button id="generate-ai" class="report-btn">Generate AI English summary</button><span id="ai-status" class="fineprint">Optional: sends a reduced evidence summary to OpenRouter; no file content or email body.</span><details id="ai-details" hidden><summary>AI English summary</summary><p id="ai-output"></p></details></div></article>
+<div class="methodology"><button id="toggle-method" class="method-button">How is the score calculated? +</button><div id="score-method" hidden><p>Each distinct indicator contributes once. Content and URL heuristic contributions are capped at 70. Reputation contributes the strongest source signal once, capped at 90. The combined score is capped at 100. Severity bands: 0–30 Low risk, 31–69 Suspicious, 70–100 Dangerous. A low score is not a safety guarantee. Integer scores are calculated from evidence, not generated randomly by AI. A score is withheld if no applicable local check completed and no reputation result is available.</p><p>Signals include disguised executable (+40), Office macro component (+25), embedded object (+15), displayed-link mismatch (+30), brand impersonation pattern (+25), URL userinfo (+15), PDF launch action (+30), PDF JavaScript marker (+20), HTML password field with external submission (+25). Presence is an indicator, not proof of malicious intent. Repeated copies of a signal do not increase its weight.</p></div></div>
+</div></section>
+        <section class="ai-section" id="history-panel" hidden><div class="workspace-card"><div class="workspace-topline"><div><span class="section-kicker">YOUR ACTIVITY / THIS BROWSER</span><h2>Analysis & report history</h2></div><div class="report-actions"><button id="history-refresh" class="report-btn">Refresh</button><button id="history-clear" class="report-btn">Clear history</button><button id="history-close" class="report-btn">Close</button></div></div><p class="fineprint">Saved on this browser and device. Not shared with other users. Clearing browser storage removes it. Latest 200 analyses and 200 exports are retained; totals count activity since the last clear.</p><label class="history-setting"><input type="checkbox" id="history-enabled" checked> Save analyses and report exports on this device</label><p id="history-status" class="fineprint" aria-live="polite"></p><div class="history-metrics"><article><span>Total analyses</span><b id="history-total-analyses">0</b></article><article><span>Report exports</span><b id="history-total-exports">0</b></article><article><span>Saved analyses / exports</span><b id="history-stored">0 / 0</b></article></div><div class="history-controls"><div class="history-tabs" role="tablist"><button id="history-analyses-tab" class="report-btn active" role="tab" aria-selected="true">Analyses</button><button id="history-exports-tab" class="report-btn" role="tab" aria-selected="false">Downloaded reports</button></div><input id="history-search" type="search" placeholder="Search target or filename" aria-label="Search history"><select id="history-kind" aria-label="Filter analysis type"><option value="all">All types</option><option value="url">URL</option><option value="file">File</option><option value="imap">Email</option></select></div><div class="evidence-scroll"><table class="provider-table history-table"><thead><tr><th>WHEN</th><th>TARGET</th><th>TYPE / FORMAT</th><th>SCORE / LEVEL</th><th>ACTIONS</th></tr></thead><tbody id="history-rows"></tbody></table></div><p id="history-empty" class="fineprint">No history yet. Completed checks appear here automatically when saving is enabled.</p></div></section>
+</main>
     </div>
 
-    <script src="/static/app.js" defer></script>
+    <script src="/static/history.js?v=3" defer></script>
+<script src="/static/app.js?v=3" defer></script>
 </body>
 </html>
