@@ -45,8 +45,18 @@ def source_lines(a):
     return lines
 
 
+def floor_note(r):
+    """Explain the band floor so a reader never sees an unexplained jump to Suspicious."""
+    codes = r.get('deceptionFloor') or []
+    if not codes:
+        return ''
+    return (' Deception floor applied (' + ', '.join(codes) + '): a rule describing deliberate '
+            'destination deception keeps the band at least Suspicious on its own, '
+            'independently of external sources.')
+
+
 def text_report(a):
-    r=a['risk'];lines=['PHISHINGHUB ANALYSIS REPORT','Report reference: '+a.get('report_id',''), 'Target: '+a['target'],'Type: '+a['kind'],'Checked at: '+a['timestamp'],'SHA-256: '+str(a.get('sha256') or 'Not applicable'),'\n1. EXECUTIVE SUMMARY',summary(a),'\n2. RISK MODEL',f"Model: {r['model']}. Score: {r['score']}. Local: {r['local']} (raw {r['localRaw']}, capped at 70). Strongest reputation signal: {r['reputation']} (capped at 90). Combined cap: 100.",'Bands: 0–30 Low risk; 31–69 Suspicious; 70–100 Dangerous. Each distinct local rule contributes once. Correlated provider scores are not summed. For documents, the strongest checked extracted-link signal can contribute to the parent. Score is not a calibrated probability or CVSS.','\n3. SOURCE-BY-SOURCE RESULTS',*source_lines(a),'\n4. LOCAL CHECKS',*[f"{c['label']} | {c['status'].upper()} | {c['detail']}" for c in a['checks']],'\n5. EVIDENCE REGISTER',*[f"{f['label']} | {f['evidence']} | +{f['points']} once per distinct rule | {f['source']}" for f in a['findings']],'\n6. EXTRACTED INDICATORS',*[defang(u) for u in a['links']],'\n7. RECOMMENDED ACTIONS',*actions(a)['steps'],'\n8. ASSESSMENT SCOPE',*a['limitations']]
+    r=a['risk'];lines=['PHISHINGHUB ANALYSIS REPORT','Report reference: '+a.get('report_id',''), 'Target: '+a['target'],'Type: '+a['kind'],'Checked at: '+a['timestamp'],'SHA-256: '+str(a.get('sha256') or 'Not applicable'),'\n1. EXECUTIVE SUMMARY',summary(a),'\n2. RISK MODEL',f"Model: {r['model']}. Score: {r['score']}. Local: {r['local']} (raw {r['localRaw']}, capped at 70). Strongest reputation signal: {r['reputation']} (capped at 90). Combined cap: 100.",'Bands: 0–30 Low risk; 31–69 Suspicious; 70–100 Dangerous. Each distinct local rule contributes once. Correlated provider scores are not summed. For documents, the strongest checked extracted-link signal can contribute to the parent. Score is not a calibrated probability or CVSS.'+floor_note(r),'\n3. SOURCE-BY-SOURCE RESULTS',*source_lines(a),'\n4. LOCAL CHECKS',*[f"{c['label']} | {c['status'].upper()} | {c['detail']}" for c in a['checks']],'\n5. EVIDENCE REGISTER',*[f"{f['label']} | {f['evidence']} | +{f['points']} once per distinct rule | {f['source']}" for f in a['findings']],'\n6. EXTRACTED INDICATORS',*[defang(u) for u in a['links']],'\n7. RECOMMENDED ACTIONS',*actions(a)['steps'],'\n8. ASSESSMENT SCOPE',*a['limitations']]
     if a['kind']=='imap':
         m=a['metadata'].get('message',{});lines+=['\nMESSAGE HEADERS','From: '+str(m.get('from','Unavailable')),'Reply-To: '+str(m.get('replyTo','Unavailable')),'Subject: '+str(m.get('subject','Unavailable')),json.dumps(m,ensure_ascii=False)]
     pending=list(children(a));seen=set()
