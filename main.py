@@ -78,7 +78,7 @@ async def index():return FileResponse(BASE/'index.html')
 @app.get('/health')
 async def health(request:Request):
     c=request.app.state.config
-    return {'status':'ok','max_file_bytes':analysis.MAX_FILE_SIZE,'sources':{'VirusTotal':bool(c.get('VT_API_KEY')),'PhishTank':c.get('PHISHTANK_ENABLED','true').lower() not in ('false','0','no'),'URLhaus':bool(c.get('URLHAUS_AUTH_KEY')),'AbuseIPDB':bool(c.get('ABUSEIPDB_API_KEY')),'Pulsedive':bool(c.get('PULSEDIVE_API_KEY'))},'ai_configured':bool(c.get('OPENROUTER_API_KEY')),'imap_configured':all(c.get(k) for k in ('IMAP_USER','IMAP_PASS','IMAP_SCAN_TOKEN'))}
+    return {'status':'ok','max_file_bytes':analysis.MAX_FILE_SIZE,'sources':{'VirusTotal':bool(c.get('VT_API_KEY')),'PhishTank':c.get('PHISHTANK_ENABLED','true').lower() not in ('false','0','no'),'URLhaus':bool(c.get('URLHAUS_AUTH_KEY')),'AbuseIPDB':bool(c.get('ABUSEIPDB_API_KEY')),'Pulsedive':bool(c.get('PULSEDIVE_API_KEY'))},'ai_configured':bool(c.get('OPENROUTER_API_KEY')),'imap_configured':all(c.get(k) for k in ('IMAP_USER','IMAP_PASS')) and bool(c.get('IMAP_SCAN_TOKEN') or open_imap(c)),'imap_open_access':open_imap(c)}
 
 def remember(request,a):
     store=request.app.state.reports;stamp=time.monotonic()
@@ -87,6 +87,10 @@ def remember(request,a):
     while len(store)>=64:store.popitem(last=False)
     token=secrets.token_urlsafe(24);a['report_id']=token;analysis.finish(a)
     store[token]=(stamp,copy.deepcopy(a));return a
+
+def open_imap(config):
+    return str(config.get('IMAP_OPEN_ACCESS','')).strip().lower() in ('true','1','yes','on')
+
 
 def get_report(request,token):
     entry=request.app.state.reports.get(token)
@@ -170,8 +174,12 @@ def summarize_providers(rows,scope):
 @app.post('/analyze/imap')
 async def analyze_imap(request:Request):
     c=request.app.state.config;expected=c.get('IMAP_SCAN_TOKEN','')
-    if not expected:raise HTTPException(503,'IMAP is not configured for access.')
-    if not hmac.compare_digest(request.headers.get('x-imap-token','').strip(),expected.strip()):raise HTTPException(403,'Incorrect IMAP access code.')
+    # Opt-in demo switch. With IMAP_OPEN_ACCESS set, a live presentation needs no
+    # typing. It is off by default on purpose: without the access code, anyone who
+    # holds this URL can read the configured mailbox.
+    if not open_imap(c):
+        if not expected:raise HTTPException(503,'IMAP is not configured for access.')
+        if not hmac.compare_digest(request.headers.get('x-imap-token','').strip(),expected.strip()):raise HTTPException(403,'Incorrect IMAP access code.')
     if not c.get('IMAP_USER') or not c.get('IMAP_PASS'):raise HTTPException(503,'IMAP credentials are not configured.')
     async with request.app.state.mail_lock:
         try:raw=await asyncio.wait_for(asyncio.to_thread(fetch_mail,c),timeout=75)
